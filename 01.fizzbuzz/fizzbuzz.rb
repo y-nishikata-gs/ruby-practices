@@ -1,10 +1,7 @@
-num_first = 1
-num_last = 20
-
-num_array = (num_first..num_last).to_a
-num_array.each do |num|
+fizzbuzz_array = (1..20).to_a
+fizzbuzz_array.each do |num|
    if  num % 3 == 0 && num % 5 == 0
-    puts "Fizz"
+    print "Fizz"
     puts "Buzz"
    elsif num % 3 == 0
     puts "Fizz"
@@ -12,5 +9,4 @@ num_array.each do |num|
     puts "Buzz"
    else
     puts num
-   end
 end
