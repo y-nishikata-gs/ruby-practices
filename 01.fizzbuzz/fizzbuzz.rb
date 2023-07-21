@@ -9,4 +9,5 @@ fizzbuzz_array.each do |num|
     puts "Buzz"
    else
     puts num
+   end
 end
