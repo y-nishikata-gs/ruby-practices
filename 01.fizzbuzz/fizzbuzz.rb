@@ -1,5 +1,4 @@
-fizzbuzz_array = (1..20).to_a
-fizzbuzz_array.each do |num|
+(1..20).each do |num|
    if  num % 3 == 0 && num % 5 == 0
     print "Fizz"
     puts "Buzz"
