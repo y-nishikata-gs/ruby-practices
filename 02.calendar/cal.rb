@@ -3,10 +3,6 @@ require 'date'
 
 today = Date.today
 
-def get_day_format(day)
-    day < 10 ? " #{day} " : "#{day} " # 1桁の日付は左にスペース
-end
-
 def create_cal(month:, year:)
     start_date = Date.new(year, month, 1)
     end_date = Date.new(year, month, -1)
@@ -17,9 +13,9 @@ def create_cal(month:, year:)
     print " " * (start_date.wday * 3)
     (start_date..end_date).each do |date|
         if date.saturday?
-            puts get_day_format(date.day)
+            puts "#{date.day.to_s.rjust(2)} " # 日はスペースと数字を合わせてsizeが2となるため
         else
-            print get_day_format(date.day)
+            print "#{date.day.to_s.rjust(2)} "
         end
     end
     print " \n"
