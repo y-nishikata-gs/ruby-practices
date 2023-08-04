@@ -12,35 +12,25 @@ def create_cal(month:, year:)
 
     print " " * (start_date.wday * 3)
     (start_date..end_date).each do |date|
-        if date.saturday?
-            puts "#{date.day.to_s.rjust(2)} " # 日はスペースと数字を合わせてsizeが2となるため
-        else
-            print "#{date.day.to_s.rjust(2)} "
-        end
+        print "#{date.day.to_s.rjust(2)} "
+        puts if date.saturday?
     end
-    print " \n"
+    puts
 end
 
-options_bool = {}
-options_value = {}
+# オプション引数をハッシュに格納してnilでないか判定するため
+options = { m: nil, y: nil}  
 
-# オプションが指定されているか判定するために取得
-opt_bool = OptionParser.new
-opt_bool.on('-m', '--month') {|v| options_bool[:m] = v }
-opt_bool.on('-y', '--year') {|v| options_bool[:y] = v }
-opt_bool.parse(ARGV)
+opt = OptionParser.new
+opt.on('-m VALUE', '--month') {|v| options[:m] = v.to_i }
+opt.on('-y VALUE', '--year') {|v| options[:y] = v.to_i }
+opt.parse(ARGV)
 
-# オプション指定の真偽値
-m_has_value = (options_bool[:m])
-y_has_value = (options_bool[:y])
+# オプション指定されているか真偽値を確かめてメソッド引数を与えるため
+m_has_value = !(options[:m]).nil?
+y_has_value = !(options[:y]).nil?
 
-# オプション引数
-opt_val = OptionParser.new
-opt_val.on('-m VALUE', '--month') {|v| options_value[:m] = v.to_i }
-opt_val.on('-y VALUE', '--year') {|v| options_value[:y] = v.to_i }
-opt_val.parse(ARGV)
-
-cal_month = m_has_value ? options_value[:m] : today.month
-cal_year = y_has_value ? options_value[:y] : today.year
+cal_month = m_has_value ? options[:m] : today.month
+cal_year = y_has_value ? options[:y] : today.year
 
 create_cal(month: cal_month, year: cal_year)
