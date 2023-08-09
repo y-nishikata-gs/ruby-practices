@@ -1,58 +1,35 @@
-require "debug"
-require "rubocop"
+# frozen_string_literal: true
 
 score = ARGV[0]
 scores = score.split(',')
 point = 0
 
-# スコアを評価してストライクであれば変換する
-def convert_score(score)
-  if score == "X"
-    return 10
-  else
-    return score.to_i
-  end
+def get_score(score)
+  score == 'X' ? 10 : score.to_i
 end
 
-# ストライクのボーナス点を加算
-def add_strike(score1, score2)
+def add_bonus(score1 = nil, score2 = nil)
   bonus_point = 0
-  bonus_point += convert_score(score1)
-  bonus_point += convert_score(score2)
-  return bonus_point
+  bonus_point += get_score(score1) if !score1.nil?
+  bonus_point += get_score(score2) if !score1.nil?
+  bonus_point
 end
 
-# スペアのボーナス点を加算
-def add_spare(score1)
-  bonus_point = 0
-  bonus_point += convert_score(score1)
-  return bonus_point
-end
+scores_index = 0
+10.times do |n|
+  point += get_score(scores[scores_index])
+  if n == 10 # スペア・ストライクの場合は3投目があるため
+    point += get_score(scores[scores_index + 1])
+    point += get_score(scores[scores_index + 2])
 
-frame = 1 # nフレーム目（2投で1セット）
-i = 0 # scoresのインデックス
-while frame <= 10
-  if frame == 10 #10フレーム目のみストライク・スペアボーナスはない
-    point += convert_score(scores[i])
-    point += convert_score(scores[i + 1])
-    point += convert_score(scores[i + 2])
-    i += 1
+  elsif scores[scores_index] == 'X' # ストライク
+    point += add_bonus(scores[scores_index + 1], scores[scores_index + 2])
+    scores_index += 1
   else
-    if scores[i] == "X" # ストライク
-      point += 10
-      point += add_strike(scores[i + 1], scores[i + 2])
-      i += 1
-    else
-      point += scores[i].to_i
-      point += scores[i + 1].to_i
-
-      if scores[i].to_i + scores[i + 1].to_i == 10 # スペア
-        point += add_spare(scores[i + 2])
-      end
-      i += 2
-    end
+    point += get_score(scores[scores_index + 1])
+    point += add_bonus(scores[scores_index + 2]) if get_score(scores[scores_index]) + get_score(scores[scores_index + 1]) == 10 # スペア
+    scores_index += 2
   end
-  frame += 1
 end
 
 puts point
